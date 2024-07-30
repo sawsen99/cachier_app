@@ -1,5 +1,6 @@
 import 'package:cachier_app/modules/cart/controller.dart';
 import 'package:cachier_app/modules/cart/widgets/phone/phone.dart';
+import 'package:cachier_app/modules/home/controller.dart';
 import 'package:cachier_app/widgets/grocery_item_tile.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -8,6 +9,9 @@ import 'package:google_fonts/google_fonts.dart';
 class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    final HomeController homeController = Get.put(HomeController());
+    final CartController cartController = Get.put(CartController());
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.transparent,
@@ -46,7 +50,7 @@ class HomePage extends StatelessWidget {
       ),
       floatingActionButton: FloatingActionButton(
         backgroundColor: Colors.black,
-        onPressed: () => Get.to(CartPage()),
+        onPressed: () => Get.to(() => CartPage()),
         child: const Icon(Icons.shopping_bag),
       ),
       body: Column(
@@ -84,24 +88,29 @@ class HomePage extends StatelessWidget {
             ),
           ),
           Expanded(
-            child: GetBuilder<CartController>(
+            child: GetBuilder<HomeController>(
               builder: (controller) {
+                if (controller.shopItems.isEmpty) {
+                  return Center(child: CircularProgressIndicator());
+                }
                 return GridView.builder(
                   padding: const EdgeInsets.all(12),
                   physics: const NeverScrollableScrollPhysics(),
-                  itemCount: controller.cartItems.length,
+                  itemCount: controller.shopItems.length,
                   gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                     crossAxisCount: 2,
                     childAspectRatio: 1 / 1.2,
                   ),
                   itemBuilder: (context, index) {
-                    final item = controller.cartItems[index];
+                    final item = controller.shopItems[index];
                     return GroceryItemTile(
                       itemName: item.itemName,
                       itemPrice: item.itemPrice.toString(),
                       imagePath: item.imagePath,
                       color: item.color,
-                      onPressed: () => controller.addItemToCart(item),
+                      onPressed: () {
+                        cartController.addItemToCart(item);
+                      },
                     );
                   },
                 );
