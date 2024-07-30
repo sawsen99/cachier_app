@@ -49,7 +49,7 @@ class HomePage extends StatelessWidget {
         ],
       ),
       floatingActionButton: FloatingActionButton(
-        backgroundColor: Colors.black,
+        backgroundColor: Colors.amber,
         onPressed: () => Get.to(() => CartPage()),
         child: const Icon(Icons.shopping_bag),
       ),

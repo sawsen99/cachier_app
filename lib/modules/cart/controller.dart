@@ -1,5 +1,4 @@
 import 'package:cachier_app/models/cart_item.dart';
-import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hive/hive.dart';
 
@@ -9,22 +8,12 @@ class CartController extends GetxController {
   @override
   void onInit() {
     super.onInit();
+    // Ensure the cart is empty initially
+    fetchCartItems();
+  }
+
+  void fetchCartItems() {
     final box = Hive.box<CartItem>('cartBox');
-    if (box.isEmpty) {
-      // Use provided fake data if no data exists in Hive
-      final fakeData = [
-        CartItem(
-            'Avocado', 4.00, 'assets/images/avocado.png', Colors.green.value),
-        CartItem(
-            'Banana', 2.50, 'assets/images/banana.png', Colors.yellow.value),
-        CartItem(
-            'Chicken', 12.80, 'assets/images/chicken.png', Colors.brown.value),
-        CartItem('Water', 1.00, 'assets/images/water.png', Colors.blue.value),
-      ];
-      for (var item in fakeData) {
-        box.add(item);
-      }
-    }
     cartItems.addAll(box.values.toList());
   }
 
@@ -38,6 +27,7 @@ class CartController extends GetxController {
     final box = Hive.box<CartItem>('cartBox');
     box.deleteAt(index);
     cartItems.removeAt(index);
+    refresh();
   }
 
   double calculateTotal() {

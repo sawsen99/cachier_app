@@ -8,7 +8,7 @@ class HomeController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    loadFakeData();
+    fetchItems();
   }
 
   void loadFakeData() {
@@ -21,5 +21,11 @@ class HomeController extends GetxController {
       CartItem('Water', 1.00, 'assets/images/water.png', Colors.blue.value),
     ];
     shopItems.assignAll(fakeData);
+  }
+
+  void fetchItems() async {
+    // Add your logic here to fetch items from an API or database.
+    // For this example, we will use the fake data.
+    loadFakeData();
   }
 }
