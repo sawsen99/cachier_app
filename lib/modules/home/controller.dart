@@ -14,12 +14,33 @@ class HomeController extends GetxController {
   void loadFakeData() {
     final fakeData = [
       CartItem(
-          0, 'Avocado', 4.00, 'assets/images/avocado.png', Colors.green.value),
+          id: 0,
+          itemName: 'Avocado',
+          itemPrice: 4.00,
+          imagePath: 'assets/images/avocado.png',
+          color: Colors.green.value,
+          quantity: 0),
       CartItem(
-          1, 'Banana', 2.50, 'assets/images/banana.png', Colors.yellow.value),
+          id: 1,
+          itemName: 'Banana',
+          itemPrice: 2.50,
+          imagePath: 'assets/images/banana.png',
+          color: Colors.yellow.value,
+          quantity: 0),
       CartItem(
-          2, 'Chicken', 12.80, 'assets/images/chicken.png', Colors.brown.value),
-      CartItem(3, 'Water', 1.00, 'assets/images/water.png', Colors.blue.value),
+          id: 2,
+          itemName: 'Chicken',
+          itemPrice: 12.80,
+          imagePath: 'assets/images/chicken.png',
+          color: Colors.brown.value,
+          quantity: 0),
+      CartItem(
+          id: 3,
+          itemName: 'Water',
+          itemPrice: 1.00,
+          imagePath: 'assets/images/water.png',
+          color: Colors.blue.value,
+          quantity: 0),
     ];
     shopItems.assignAll(fakeData);
   }

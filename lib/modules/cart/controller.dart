@@ -28,6 +28,7 @@ class CartController extends GetxController {
   }
 
   void addItemToCart(CartItem cartItem) async {
+    isLoading(true);
     final result = await cartItemServiceLocal.addItemToCart(cartItem);
     result.fold(
       (error) => print("Error adding to local storage: $error"),
@@ -35,10 +36,13 @@ class CartController extends GetxController {
         cartItems.add(newCartItem);
       },
     );
+    isLoading(false);
   }
 
-  void removeItemFromCart(int index) async {
+  void removeItemFromCart(CartItem cartItem, int index) async {
+    isLoading(true);
     final result = await cartItemServiceLocal.deleteItem(index);
+    cartItem.quantity = 0;
     result.fold(
       (error) => print("Error deleting from local storage: $error"),
       (message) {
@@ -47,9 +51,53 @@ class CartController extends GetxController {
         refresh();
       },
     );
+    isLoading(false);
+  }
+
+  void addQuantity(CartItem cartItem) async {
+    isLoading(true);
+    final result = await cartItemServiceLocal.updateItemQuantity(
+        cartItem, cartItem.quantity + 1);
+    result.fold(
+      (error) => print("Error updating quantity: $error"),
+      (updatedItem) {
+        refresh();
+      },
+    );
+    isLoading(false);
+  }
+
+  void reduceQuantity(CartItem cartItem, int index) async {
+    isLoading(true);
+    if (cartItem.quantity > 1) {
+      final result = await cartItemServiceLocal.updateItemQuantity(
+        cartItem,
+        cartItem.quantity - 1,
+      );
+
+      result.fold(
+        (error) => print("Error updating quantity: $error"),
+        (updatedItem) {
+          refresh();
+        },
+      );
+    } else if (cartItem.quantity == 1) {
+      final result = await cartItemServiceLocal.deleteItem(index);
+
+      result.fold(
+        (error) => print("Error updating quantity: $error"),
+        (message) {
+          print(message);
+          cartItems.removeAt(index);
+          refresh();
+        },
+      );
+    }
+    isLoading(false);
   }
 
   double calculateTotal() {
-    return cartItems.fold(0, (sum, item) => sum + item.itemPrice);
+    return cartItems.fold(
+        0, (sum, item) => sum + item.itemPrice * item.quantity);
   }
 }

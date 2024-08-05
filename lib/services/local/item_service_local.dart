@@ -25,6 +25,7 @@ class CartItemServiceLocal extends GetxService {
     try {
       int key = await cartBox.add(cartItem);
       CartItem newCartItem = cartBox.get(key)!;
+      newCartItem.quantity++;
       return Right(newCartItem);
     } catch (e) {
       return Left(e.toString());
@@ -35,6 +36,17 @@ class CartItemServiceLocal extends GetxService {
     try {
       await cartBox.deleteAt(index);
       return const Right('Item deleted successfully');
+    } catch (e) {
+      return Left(e.toString());
+    }
+  }
+
+  Future<Either<String, CartItem>> updateItemQuantity(
+      CartItem cartItem, int quantity) async {
+    try {
+      cartItem.quantity = quantity;
+      await cartBox.put(cartItem.key, cartItem);
+      return Right(cartItem);
     } catch (e) {
       return Left(e.toString());
     }

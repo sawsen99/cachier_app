@@ -50,17 +50,38 @@ class CartPage extends StatelessWidget {
                               height: 36,
                             ),
                             title: Text(
-                              item.itemName,
+                              item.itemName +
+                                  '(' +
+                                  item.quantity.toString() +
+                                  ')',
                               style: const TextStyle(fontSize: 18),
                             ),
                             subtitle: Text(
                               '\$' + item.itemPrice.toString(),
                               style: const TextStyle(fontSize: 12),
                             ),
-                            trailing: IconButton(
-                              icon: const Icon(Icons.cancel),
-                              onPressed: () =>
-                                  controller.removeItemFromCart(index),
+                            trailing: Row(
+                              mainAxisSize: MainAxisSize
+                                  .min, // Ensure row takes minimal space
+                              children: [
+                                IconButton(
+                                  icon: const Icon(Icons.remove),
+                                  onPressed: () =>
+                                      controller.reduceQuantity(item, index),
+                                ),
+                                IconButton(
+                                  icon: const Icon(Icons.add),
+                                  onPressed: () => controller.addQuantity(item),
+                                ),
+                                IconButton(
+                                  icon: const Icon(
+                                    Icons.cancel,
+                                    color: Colors.red,
+                                  ),
+                                  onPressed: () => controller
+                                      .removeItemFromCart(item, index),
+                                ),
+                              ],
                             ),
                           ),
                         ),

@@ -19,5 +19,14 @@ class CartItem extends HiveObject {
   @HiveField(4)
   final int color;
 
-  CartItem(this.id, this.itemName, this.itemPrice, this.imagePath, this.color);
+  @HiveField(5)
+  int quantity;
+
+  CartItem(
+      {this.id,
+      required this.itemName,
+      required this.itemPrice,
+      required this.imagePath,
+      required this.color,
+      required this.quantity});
 }
